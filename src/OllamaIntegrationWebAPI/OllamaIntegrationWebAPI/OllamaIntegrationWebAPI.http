@@ -1,0 +1,10 @@
+@OllamaIntegrationWebAPI_HostAddress = http://localhost:5062
+
+GET {{OllamaIntegrationWebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+### 测试 Ollama 流式对话接口
+POST {{OllamaIntegrationWebAPI_HostAddress}}/api/Chat/api-stream
+Content-Type: application/json
+
+"请解释一下什么是异步编程"
