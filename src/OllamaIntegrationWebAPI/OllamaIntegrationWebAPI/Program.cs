@@ -15,6 +15,16 @@ var modelName = builder.Configuration["OllamaConfig:ModelName"];
 // 注册 Ollama 客户端
 builder.Services.AddSingleton<IOllamaApiClient>(new OllamaApiClient(ollamaUrl, modelName));
 
+// 配置 CORS 以允许来自 Vue 应用的请求
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowVueApp",
+        builder => builder.WithOrigins("http://localhost:5173") // Vue 的默认地址
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials());
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -24,7 +34,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseCors("AllowVueApp"); // 必须在 UseAuthorization 之前调用
+
+//app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
